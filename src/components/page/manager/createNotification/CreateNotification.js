@@ -85,17 +85,13 @@ const CreateNotification = ({ data, handleModal, setLoading }) => {
     }
     return (
       <Row>
-        <Col xs={4} md={4} xl={4}>
+        <Col xl={4}>
           <p>
             File:<span className="requiredField"> (*)</span>
           </p>
         </Col>
-        <Col>
-          <p
-            className="textOverFlow colorBlue resetMargin"
-            style={{ cursor: 'pointer', color: 'blue' }}
-            onClick={redirect}
-          >
+        <Col xl={20}>
+          <p className=" colorBlue resetMargin hoverLink" onClick={redirect}>
             {nameFile}
           </p>
         </Col>

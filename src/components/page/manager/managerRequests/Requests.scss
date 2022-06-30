@@ -1,5 +1,5 @@
 .tableManager {
-  width: 90%;
+  width: 92%;
   margin: auto;
   padding-top: 40px;
   .dFlex {
@@ -7,4 +7,23 @@
     justify-content: center;
     align-items: center;
   }
+}
+.modalRequests {
+  .ant-modal-footer {
+    button {
+      span {
+        pointer-events: none;
+      }
+    }
+  }
+}
+.errorField {
+  color: red;
+  margin-right: 10px;
+}
+
+.searchInput {
+  width: 92%;
+  margin: auto;
+  padding-top: 40px;
 }

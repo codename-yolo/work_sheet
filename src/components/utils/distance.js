@@ -5,7 +5,6 @@ const distance = (idElement, percent = 55) => {
   const HEIGHT = screenHeight - header.getBoundingClientRect().height - 160
   homeTable.style.height = HEIGHT + 'px'
   homeTable.style.maxHeight = HEIGHT + 'px'
-  homeTable.style.overflow = 'hidden'
   const height = screenHeight - header.getBoundingClientRect().height
   return {
     height: height,

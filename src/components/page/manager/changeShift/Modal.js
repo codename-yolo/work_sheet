@@ -86,75 +86,56 @@ const ModalChangeShift = ({ modal, handleClose, handleUpdate }) => {
             Cancel
           </Button>,
         ]}
-        width={700}
+        width={500}
         onCancel={confirm}
         onOk={handleSubmit}
       >
         <div className="userInfo">
+          <Row>
+            <Col xl={24} className="dFlex">
+              <Col xl={8}>Member Name:</Col>
+              <Col xl={16}>{modal.data.member_name}</Col>
+            </Col>
+          </Row>
+          <Row>
+            <Col xl={24} className="dFlex">
+              <Col xl={8}>Email:</Col>
+              <Col xl={16}> {modal.data.email}</Col>
+            </Col>
+          </Row>
+          <Row>
+            <Col xl={24} className="dFlex">
+              <Col xl={8}> Division:</Col>
+              <Col xl={16}> {modal.data.division_name}</Col>
+            </Col>
+          </Row>
           <Row style={{ margin: 0 }}>
-            <Col xs={24} md={24} xl={24}>
-              <Row>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={9}>Member Name:</Col>
-                  <Col xl={15}>{modal.data.member_name}</Col>
-                </Col>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={7}>Email:</Col>
-                  <Col xl={17}> {modal.data.email}</Col>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={9}> Check In:</Col>
-                  <Col xl={15}> {modal.data.check_in}</Col>
-                </Col>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={7}>Check Out:</Col>
-                  <Col xl={17}>{modal.data.check_out}</Col>
-                </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={9}> Division:</Col>
-                  <Col xl={15}> {modal.data.division_name}</Col>
-                </Col>
-                <Col xs={12} md={12} xl={12} className="dFlex">
-                  <Col xl={7}> Shift Name:</Col>
-                  <Col xl={17}>
-                    <strong>{modal.data.shift_name}</strong>
-                  </Col>
-                </Col>
-              </Row>
-              <Row style={{ margin: 0 }}>
-                <Col span={12} className="dFlex">
-                  <Col xl={9} style={{ alignSelf: 'center' }}>
-                    Change Shift:
-                  </Col>
-                  <Col xl={15}>
-                    <Select
-                      defaultValue={`${modal.data.shift_name} - (${modal.data.check_in} - ${modal.data.check_out})`}
-                      style={{
-                        width: 170,
-                      }}
-                      onChange={handleChange}
-                    >
-                      {shiftList &&
-                        shiftList.map((item) => {
-                          return (
-                            <Option key={item.id} value={item.id}>
-                              {checkShift(
-                                item.shift_name,
-                                item.check_in,
-                                item.check_out,
-                              )}
-                            </Option>
-                          )
-                        })}
-                    </Select>
-                  </Col>
-                </Col>
-                <Col span={12}></Col>
-              </Row>
+            <Col xl={24} className="dFlex">
+              <Col xl={8} style={{ alignSelf: 'center' }}>
+                Shift:
+              </Col>
+              <Col xl={16}>
+                <Select
+                  defaultValue={`${modal.data.shift_name} - (${modal.data.check_in} - ${modal.data.check_out})`}
+                  style={{
+                    width: 155,
+                  }}
+                  onChange={handleChange}
+                >
+                  {shiftList &&
+                    shiftList.map((item) => {
+                      return (
+                        <Option key={item.id} value={item.id}>
+                          {checkShift(
+                            item.shift_name,
+                            item.check_in,
+                            item.check_out,
+                          )}
+                        </Option>
+                      )
+                    })}
+                </Select>
+              </Col>
             </Col>
           </Row>
         </div>

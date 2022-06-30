@@ -21,6 +21,7 @@ import {
   requestSlice,
   endPoint,
   checkRequest,
+  typePopup,
 } from '../../../index'
 import styles from './Index.module.scss'
 
@@ -34,10 +35,12 @@ const {
 const Index = ({ handleCloseLateEarly, isOpen, row }) => {
   const [requestExists, setRequestExists] = useState(false)
   const [overTime, setOverTime] = useState(null)
-  const [validateTime, setValidateTime] = useState(false)
   const checkRef = useRef(1)
 
-  const timeRequest = handleFormat(handlePlusTime(row?.late, row?.early))
+  const timeRequest =
+    !row?.late && !row?.early
+      ? '--:--'
+      : handleFormat(handlePlusTime(row?.late, row?.early))
 
   const getCompensation = async (date) => {
     const response = await get(
@@ -109,16 +112,16 @@ const Index = ({ handleCloseLateEarly, isOpen, row }) => {
   }, [request])
 
   const onSubmit = async (values, e) => {
-    const overTM = +(overTime ? overTime : '00:00').replace(':', '')
-    const timeRq = +(timeRequest ? timeRequest : '00:00').replace(':', '')
-
-    if (!overTime) {
-      setValidateTime(true)
-    }
-
-    if (overTM < timeRq) {
+    if (!overTime || timeRequest === '--:--') {
+      typePopup.popupNotice(
+        typePopup.ERROR_MESSAGE,
+        'Message',
+        'Overtime or time request not found',
+        1,
+      )
       return null
     }
+
     const buttonSubmit = e.nativeEvent.submitter.name.toUpperCase()
     switch (buttonSubmit) {
       case 'REGISTER':
@@ -311,7 +314,6 @@ const Index = ({ handleCloseLateEarly, isOpen, row }) => {
                                     const res = async () => {
                                       const response = await getCompensation(e)
                                       setOverTime(response)
-                                      setValidateTime(false)
                                     }
                                     res()
                                     return field.onChange(e)
@@ -349,12 +351,7 @@ const Index = ({ handleCloseLateEarly, isOpen, row }) => {
                             Overtime:
                           </Col>
                           <Col xs={12} md={14} xl={16}>
-                            {validateTime && (
-                              <span className={styles.requiredField}>
-                                Time is not valid
-                              </span>
-                            )}
-                            {overTime}
+                            {overTime ? overTime : '--:--'}
                           </Col>
                         </Col>
                         <Col
@@ -373,7 +370,7 @@ const Index = ({ handleCloseLateEarly, isOpen, row }) => {
                                 timeRequest,
                               )}
                             >
-                              {timeRequest}
+                              {timeRequest === '00:00' ? '--:--' : timeRequest}
                             </p>
                           </Col>
                         </Col>

@@ -284,6 +284,7 @@ const NotificationList = () => {
               author: '20%',
               action: '8%',
               status: '12%',
+              published_date: '15%',
             }}
             styleBody={{
               subject: { className: 'textOverflow' },

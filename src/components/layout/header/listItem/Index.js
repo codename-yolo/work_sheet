@@ -2,7 +2,6 @@ import React from 'react'
 import styles from './Index.module.scss'
 import { Row, Col } from 'antd'
 import { HomeOutlined, AuditOutlined, UserAddOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
 import { NavLink } from 'react-router-dom'
 import { Dropdown, Menu } from 'antd'
 import {
@@ -22,14 +21,22 @@ const Index = () => {
       items={[
         {
           key: '1',
-          label: <Link to={'/admin/manager'}>List requests</Link>,
+          label: (
+            <NavLink to={'/admin/manager'} id="subNav">
+              List requests
+            </NavLink>
+          ),
           icon: (
             <DatabaseOutlined style={{ color: '#23466d', fontSize: '14px' }} />
           ),
         },
         {
           key: '2',
-          label: <Link to={'/admin/change-shift'}>Change shift</Link>,
+          label: (
+            <NavLink to={'/admin/change-shift'} id="subNav">
+              Change shift
+            </NavLink>
+          ),
           icon: (
             <ClockCircleOutlined
               style={{ color: '#23466d', fontSize: '14px' }}
@@ -38,7 +45,11 @@ const Index = () => {
         },
         {
           key: '3',
-          label: <Link to={'/admin/notification'}>Create notice</Link>,
+          label: (
+            <NavLink to={'/admin/notification'} id="subNav">
+              Create notice
+            </NavLink>
+          ),
           icon: <FormOutlined style={{ color: '#23466d', fontSize: '14px' }} />,
         },
       ]}

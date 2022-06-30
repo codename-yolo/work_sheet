@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import RequestDetail from './requestDetail/RequestDetail'
 import { checkConfirm } from './checkConfirm'
-import { Tag, Button, Modal } from 'antd'
+import { Tag, Button, Modal, Input } from 'antd'
 import {
   DoubleLeftOutlined,
   LeftOutlined,
@@ -10,12 +10,14 @@ import {
   RightOutlined,
   CloseCircleOutlined,
   CloseCircleTwoTone,
+  SearchOutlined,
 } from '@ant-design/icons'
 import {
   getRequests,
   putRequestsManager,
   putRequestsReject,
 } from './slice/managerSlice'
+import { searchFilterChange, filtersRequestSelector } from './slice/filterSlice'
 import {
   checkRequestStatus,
   checkRequestStatusColor,
@@ -27,26 +29,33 @@ import {
   messageRequest,
   CMTable,
 } from '../../../index'
+import distance from '../../../utils/distance'
 import '../../../common/createModal/ModalRequest.scss'
 import './Requests.scss'
-import distance from '../../../utils/distance'
 
 const Manager = () => {
-  const [dataTable, setDataTable] = useState([])
   const [rowData, setRowData] = useState({})
   const [isOpen, setIsOpen] = useState(false)
   const [reload, setReload] = useState(false)
   const [heighTable, setHeightTable] = useState(0)
-  const commentInput = useRef(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
-
+  const [commentEmpty, setCommentEmpty] = useState(false)
+  const [searchText, setSearchText] = useState('')
+  const commentInput = useRef(null)
   const dispatch = useDispatch()
-  const { role: roleUser } = useSelector((state) => state.userInfo?.currentUser)
-  const { requests, status } = useSelector((state) => state.managerRequest)
 
+  const { role: roleUser } = useSelector((state) => state.userInfo?.currentUser)
+  const { status } = useSelector((state) => state.managerRequest)
+  const requests = useSelector(filtersRequestSelector)
+
+  const handleSearchTextChange = (e) => {
+    const value = e.target.value
+    setSearchText(value)
+    dispatch(searchFilterChange(value))
+  }
   useEffect(() => {
-    const height = distance('RequestMN', 48)
+    const height = distance('RequestMN', 57)
     setHeightTable(height.heightTable)
   }, [])
 
@@ -65,35 +74,14 @@ const Manager = () => {
     getDataRequests()
   }, [reload])
 
-  useEffect(() => {
-    if (requests.length !== 0) {
-      const data = requests.map((request) => {
-        const newRequest = { key: request.id, ...request }
-        return newRequest
-      })
-      setDataTable(data)
-    }
+  const dataTable = useMemo(() => {
+    const data = requests.map((request) => {
+      const newRequest = { key: request.id, ...request }
+      return newRequest
+    })
+    return data
   }, [requests])
 
-  const onClickConfirm = async () => {
-    const comment = commentInput.current.resizableTextArea.props.value
-    await tryCatch.handleTryCatch(
-      dispatch(
-        putRequestsManager({
-          url: endPoint.PUT_REQUEST_MANAGER + rowData.id,
-          data: {
-            status: 1,
-            comment: comment ? comment : 'Manager confirmed request',
-          },
-        }),
-      ),
-      messageRequest.MANAGER_CONFIRMED,
-      () => {
-        setIsOpen(false)
-        setReload(!reload)
-      },
-    )
-  }
   const onClickRejectManager = async () => {
     const comment = commentInput.current.resizableTextArea.props.value
     await tryCatch.handleTryCatch(
@@ -113,25 +101,7 @@ const Manager = () => {
       },
     )
   }
-  const onClickApproved = async () => {
-    const comment = commentInput.current.resizableTextArea.props.value
-    await tryCatch.handleTryCatch(
-      dispatch(
-        putRequestsManager({
-          url: endPoint.PUT_REQUEST_ADMIN + rowData.id,
-          data: {
-            status: 2,
-            comment: comment ? comment : 'Admin approved request',
-          },
-        }),
-      ),
-      messageRequest.ADMIN_APPROVED,
-      () => {
-        setIsOpen(false)
-        setReload(!reload)
-      },
-    )
-  }
+
   const onClickRejectAdmin = async () => {
     const comment = commentInput.current.resizableTextArea.props.value
     await tryCatch.handleTryCatch(
@@ -151,7 +121,6 @@ const Manager = () => {
       },
     )
   }
-
   const confirmReject = () => {
     const user = roleUser.toUpperCase()
     const rejectFunction =
@@ -176,7 +145,60 @@ const Manager = () => {
       onCancel: rejectFunction,
     })
   }
-  const confirmCloseModal = (e) => {
+  const onSubmit = async (e) => {
+    const comment = commentInput.current.resizableTextArea.props.value
+    if (!comment.trim()) {
+      setCommentEmpty(true)
+      return null
+    }
+    const buttonName = e.target.name
+    switch (buttonName) {
+      case 'managerConfirm':
+        await tryCatch.handleTryCatch(
+          dispatch(
+            putRequestsManager({
+              url: endPoint.PUT_REQUEST_MANAGER + rowData.id,
+              data: {
+                status: 1,
+                comment,
+              },
+            }),
+          ),
+          messageRequest.MANAGER_CONFIRMED,
+          () => {
+            setIsOpen(false)
+            setReload(!reload)
+          },
+        )
+        break
+      case 'adminApproved':
+        await tryCatch.handleTryCatch(
+          dispatch(
+            putRequestsManager({
+              url: endPoint.PUT_REQUEST_ADMIN + rowData.id,
+              data: {
+                status: 2,
+                comment,
+              },
+            }),
+          ),
+          messageRequest.ADMIN_APPROVED,
+          () => {
+            setIsOpen(false)
+            setReload(!reload)
+          },
+        )
+        break
+      case 'managerReject':
+      case 'adminReject':
+        confirmReject()
+        break
+      default:
+        throw new Error('An error occurred')
+    }
+  }
+
+  const confirmCloseModal = () => {
     Modal.confirm({
       title: 'Modal',
       icon: <CloseCircleOutlined />,
@@ -197,6 +219,7 @@ const Manager = () => {
   }
   const handleCloseModal = () => {
     setIsOpen(false)
+    setCommentEmpty(false)
   }
 
   const columns = [
@@ -215,7 +238,14 @@ const Manager = () => {
       dataIndex: 'full_name',
       key: 'full_name',
     },
-
+    {
+      title: <h4>EMAIL</h4>,
+      dataIndex: 'email',
+      key: 'email',
+      render: (_, record) => {
+        return <p className="textOverflow textCenter">{_}</p>
+      },
+    },
     {
       title: <h4>REQUEST TYPE</h4>,
       dataIndex: 'request_type',
@@ -321,6 +351,15 @@ const Manager = () => {
 
   return (
     <div id="RequestMN">
+      <div className="searchInput">
+        <Input
+          size="large"
+          placeholder="Search for name or email..."
+          prefix={<SearchOutlined />}
+          value={searchText}
+          onChange={handleSearchTextChange}
+        />
+      </div>
       {dataTable && (
         <>
           <CMTable
@@ -337,6 +376,7 @@ const Manager = () => {
             width={{
               id: '5%',
               full_name: '20%',
+              email: '25%',
               request_type: '15%',
               reason: '30%',
               created_at: '15%',
@@ -386,6 +426,8 @@ const Manager = () => {
             handleCloseModal,
             confirmCloseModal,
           )}
+          className="modalRequestContainer modalRequests"
+          width={900}
           footer={
             roleUser === 'Manager'
               ? rowData.status !== 0
@@ -407,10 +449,9 @@ const Manager = () => {
                     <Button
                       key="confirm"
                       type="primary"
-                      onClick={onClickConfirm}
+                      onClick={onSubmit}
+                      name="managerConfirm"
                       loading={status === 'loadingManagerUpdate'}
-                      htmlType="submit"
-                      form="myForm"
                     >
                       Confirm
                     </Button>,
@@ -429,13 +470,13 @@ const Manager = () => {
                     <Button
                       key="reject"
                       type="primary"
-                      onClick={confirmReject}
+                      onClick={onSubmit}
                       loading={status === 'loadingRejectRequest'}
                       style={{ padding: '0 30px' }}
                       name="managerReject"
                       danger
                     >
-                      Reject
+                      <span onClick={onSubmit}>Reject</span>
                     </Button>,
                   ]
               : roleUser === 'Admin'
@@ -458,7 +499,8 @@ const Manager = () => {
                     <Button
                       key="approved"
                       type="primary"
-                      onClick={onClickApproved}
+                      onClick={onSubmit}
+                      name="adminApproved"
                       loading={status === 'loadingManagerUpdate'}
                     >
                       Approved
@@ -478,7 +520,7 @@ const Manager = () => {
                     <Button
                       key="reject"
                       type="primary"
-                      onClick={confirmReject}
+                      onClick={onSubmit}
                       loading={status === 'loadingRejectRequest'}
                       style={{ padding: '0 30px' }}
                       name="adminReject"
@@ -489,13 +531,12 @@ const Manager = () => {
                   ]
               : ''
           }
-          className="modalRequestContainer"
-          width={900}
         >
           <RequestDetail
             row={rowData}
             refInput={commentInput}
             roleUser={roleUser}
+            commentInput={{ value: commentEmpty, setEmpty: setCommentEmpty }}
           ></RequestDetail>
         </Modal>
       )}

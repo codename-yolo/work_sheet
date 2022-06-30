@@ -159,7 +159,14 @@ const ChangeShift = () => {
       dataIndex: 'shift_name',
       key: 'shift_name',
       render: (payload, record) => {
-        return <div className="tb_center">{payload}</div>
+        const {
+          shift_name: shiftName,
+          check_in: checkIn,
+          check_out: checkOut,
+        } = record
+        return (
+          <div className="tb_center">{`${shiftName} - (${checkIn} - ${checkOut})`}</div>
+        )
       },
     },
   ]

@@ -249,7 +249,6 @@ const TableTimesheet = ({ row, params }) => {
             }
           })
         }
-
         return (
           <div className="note">
             {record ? (

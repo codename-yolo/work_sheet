@@ -16,6 +16,7 @@ import {
   buttonForm,
   tryCatch,
   endPoint,
+  typePopup,
   messageRequest,
   requestSlice,
   checkRequest,
@@ -97,6 +98,18 @@ const LeaveModal = ({ isOpen, row, handleCloseLeave }) => {
   }, [request])
 
   const onSubmit = async (values, e) => {
+    if (
+      (!row.checkin && !row.checkout) ||
+      (!row.checkin_original && !row.checkout_original)
+    ) {
+      typePopup.popupNotice(
+        typePopup.ERROR_MESSAGE,
+        'Message',
+        'Time not found',
+        1,
+      )
+      return
+    }
     const [leaveStart, leaveEnd] = values.rangeInput || []
     const buttonSubmit = e.nativeEvent.submitter.name.toUpperCase()
     switch (buttonSubmit) {
@@ -264,7 +277,7 @@ const LeaveModal = ({ isOpen, row, handleCloseLeave }) => {
                   </Col>
                   <Col xl={12} md={12} xs={12}>
                     {handleDateTime.checkInvalidTime(
-                      row?.checkout || row?.checkin_original,
+                      row?.checkout || row?.checkout_original,
                     )}
                   </Col>
                 </Col>

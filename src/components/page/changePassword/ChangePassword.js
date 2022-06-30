@@ -122,6 +122,7 @@ const ChangePassword = () => {
           }}
           initialValues={{
             email: emailUser?.email,
+            Password: '',
           }}
           onFinish={onFinish}
           autoComplete="off"

@@ -5,6 +5,7 @@ import { get } from '../../../service/requestApi'
 import TableCS from '../../../common/table/Table'
 import moment from 'moment'
 import { dateTime, handleDateTime } from '../../../index'
+import './ModalLogTime.scss'
 
 const ModalLogTime = ({ modal, handleClose }) => {
   const [dateList, setDateList] = useState([])
@@ -18,7 +19,6 @@ const ModalLogTime = ({ modal, handleClose }) => {
     }
     getDateList()
   }, [])
-  console.log('dataList', dateList)
   const columns = [
     {
       title: <h4>NO</h4>,

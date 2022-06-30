@@ -22,7 +22,7 @@ const Index = () => {
           type: 'group',
           label: (
             <div style={{ borderBottom: '1px solid #333', cursor: 'default' }}>
-              <strong> {info.name}</strong>
+              <strong> {info?.name}</strong>
               <div style={{ fontStyle: 'italic', fontSize: '13px' }}>
                 {role}
               </div>

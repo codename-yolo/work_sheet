@@ -13,7 +13,7 @@ const {
 } = checkRequest
 import './RequestDetail.scss'
 
-const RequestDetail = ({ row, refInput, roleUser }) => {
+const RequestDetail = ({ row, refInput, roleUser, commentInput }) => {
   const {
     check_in: checkIn,
     check_out: checkOut,
@@ -32,6 +32,14 @@ const RequestDetail = ({ row, refInput, roleUser }) => {
     manager_confirmed_comment: managerConfirmedComment,
     admin_approved_comment: adminApprovedComment,
   } = row
+
+  const onChange = (e) => {
+    if (!e.target.value.trim()) {
+      commentInput.setEmpty(true)
+    } else {
+      commentInput.setEmpty(false)
+    }
+  }
   return (
     <div className="requestDetail">
       <Row style={{ margin: 0 }}>
@@ -58,7 +66,14 @@ const RequestDetail = ({ row, refInput, roleUser }) => {
             <Col xl={8}>Reason:</Col>
             <Col xl={16}>{reason}</Col>
           </Row>
-
+          <Row>
+            <Col xl={8}>Status:</Col>
+            <Col xl={16}>
+              <strong style={{ color: checkRequestStatusColorText(status) }}>
+                {checkRequestStatus(status).toUpperCase()}
+              </strong>
+            </Col>
+          </Row>
           {((roleUser === 'Manager' && requestStatus !== 0) ||
             roleUser === 'Admin') && (
             <Row>
@@ -74,29 +89,27 @@ const RequestDetail = ({ row, refInput, roleUser }) => {
           )}
           {(roleUser === 'Admin' && requestStatus === 1) ||
           (roleUser === 'Manager' && requestStatus === 0) ? (
-            <Row>
-              <Col xl={8}>Comment:</Col>
+            <Row style={{ margin: 0 }}>
+              <Col xl={8}>
+                Comment:<span style={{ color: 'red' }}> (*)</span>
+              </Col>
               <Col xl={16}>
                 <Input.TextArea
                   ref={refInput}
+                  onChange={onChange}
                   autoSize={{ minRows: 3, maxRows: 3 }}
                   maxLength={100}
                   placeholder="Please enter not too 100 characters"
                   showCount
                 ></Input.TextArea>
+                {commentInput.value && (
+                  <span className="requiredField">Please enter comment</span>
+                )}
               </Col>
             </Row>
           ) : (
             <></>
           )}
-          <Row style={{ margin: 0 }}>
-            <Col xl={8}>Status:</Col>
-            <Col xl={16}>
-              <strong style={{ color: checkRequestStatusColorText(status) }}>
-                {checkRequestStatus(status).toUpperCase()}
-              </strong>
-            </Col>
-          </Row>
         </Col>
         <Col
           xl={9}
@@ -156,6 +169,7 @@ RequestDetail.propTypes = {
   row: PropTypes.object,
   refInput: PropTypes.object,
   roleUser: PropTypes.string,
+  commentInput: PropTypes.object,
 }
 
 export default RequestDetail

@@ -68,3 +68,10 @@
     }
   }
 }
+.hoverLink {
+  cursor: pointer;
+  color: blue;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

@@ -10,7 +10,7 @@ export const DELETE_REQUEST_FORGET = 'register-forget/delete/'
 
 export const GET_REQUEST_OT = 'register-ot/show'
 export const POST_REQUEST_OT = 'register-ot/store'
-export const PUT_REQUEST_OT = 'register-forget/update/'
+export const PUT_REQUEST_OT = 'register-ot/update/'
 export const DELETE_REQUEST_OT = 'register-ot/delete/'
 
 export const GET_REQUEST_LATE_EARLY_OF_DAY = 'register-late-early/show'

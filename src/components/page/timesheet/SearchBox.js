@@ -24,18 +24,23 @@ const SearchBox = () => {
   const [errDate, setErrDate] = useState(false)
   const dispatch = useDispatch()
   const [params, setParams] = useState({
-    sort: 'asc',
+    sort: 'desc',
     startDate: null,
     endDate: moment().subtract(1, 'days'),
   })
 
   useEffect(() => {
+    const dateCompare =
+      moment().format('YYYY-MM-DD') ===
+      moment().startOf('month').format('YYYY-MM-DD')
+        ? moment().subtract(1, 'months').startOf('month')
+        : moment().startOf('month')
     dispatch(
       getTimeSheet({
         ...params,
         page: 1,
         perPage: 10,
-        startDate: moment().startOf('month'),
+        startDate: dateCompare,
       }),
     )
   }, [])
@@ -76,16 +81,22 @@ const SearchBox = () => {
           )
           break
         case 3:
+          const dateCompare =
+            moment().format('YYYY-MM-DD') ===
+            moment().startOf('month').format('YYYY-MM-DD')
+              ? moment().subtract(1, 'months').startOf('month')
+              : moment().startOf('month')
+
           setParams((prev) => ({
             ...prev,
-            startDate: moment().startOf('month'),
+            startDate: dateCompare,
           }))
           dispatch(
             getTimeSheet({
               ...params,
               page: 1,
               perPage: worksheet.per_page,
-              startDate: moment().startOf('month'),
+              startDate: dateCompare,
             }),
           )
 
@@ -144,7 +155,7 @@ const SearchBox = () => {
             initialValues={{
               selectedDate: 3,
               selected: 1,
-              sort: 'asc',
+              sort: 'desc',
               endDate: params.endDate,
               radioGroup: 2,
             }}

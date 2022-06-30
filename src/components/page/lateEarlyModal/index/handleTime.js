@@ -34,7 +34,7 @@ export const handleSubTime = (start, end) => {
   if (hours < 9 || !hours) {
     return null
   }
-  return handleFormat({ hours, minutes })
+  return handleFormat({ hours: hours - 9, minutes })
 }
 
 export const handleFormat = (times) => {
