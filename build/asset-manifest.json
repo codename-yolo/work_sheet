@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a55f7657.css",
+    "main.js": "/static/js/main.d33d671f.js",
+    "static/media/astronaut.svg": "/static/media/astronaut.560823e47b8b30be5a3748237ae4d0e3.svg",
+    "static/media/spaceship.svg": "/static/media/spaceship.ed5043b01f978d689d92a545b7c86968.svg",
+    "static/media/avatarDefault.png": "/static/media/avatarDefault.235f193d81e82bb12dc3.png",
+    "static/media/404.svg": "/static/media/404.931b99ab698b27b0de1e5281b52c6d67.svg",
+    "static/media/star.svg": "/static/media/star.eddb67e4417d2c9799fd.svg",
+    "static/media/mars.svg": "/static/media/mars.84a9d1af8eb534ce72bf.svg",
+    "static/media/logo.svg": "/static/media/logo.a6dd5121a0628bd17d4a5e2dcce29dd3.svg",
+    "static/media/moon.svg": "/static/media/moon.f113dccb749f3d602a6c94a1c8dd3129.svg",
+    "static/media/401.svg": "/static/media/401.42bc64db91e90707025d0db8c97f9e3d.svg",
+    "static/media/earth.svg": "/static/media/earth.46da1950ba263e93e44152a4c4f8d120.svg",
+    "static/media/meteor.svg": "/static/media/meteor.533ace94dd1ac26f9258a0081f7ce78f.svg",
+    "static/media/rocket.svg": "/static/media/rocket.9d88a52a8c7e9a9f79d4e0e28f788772.svg",
+    "static/media/overlayStars.svg": "/static/media/overlayStars.a862e028b2a7ceb63224.svg",
+    "index.html": "/index.html",
+    "main.a55f7657.css.map": "/static/css/main.a55f7657.css.map",
+    "main.d33d671f.js.map": "/static/js/main.d33d671f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a55f7657.css",
+    "static/js/main.d33d671f.js"
+  ]
+}
