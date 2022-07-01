@@ -122,15 +122,10 @@ const ChangePassword = () => {
           }}
           initialValues={{
             email: emailUser?.email,
-            Password: '',
           }}
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Form.Item label="Email" name="email" rules={[]} className="email">
-            <Input disabled={true} />
-          </Form.Item>
-
           <Form.Item
             label="Old Password: "
             name="old_password"
